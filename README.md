@@ -31,15 +31,6 @@ To build and run the project, follow these steps:
 5. Start the development server with `npm run dev`
 6. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-## Checklist
-
-- [ ] Dockerfile
-- [X] View all Routes
-- [ ] Delete routes
-- [ ] Add routes
-- [ ] Edit routes
-- [ ] User accounts
-
 ## Contributions
 
 Contributions are welcome! Feel free to submit pull requests or open issues if you find any bugs or have suggestions for new features.
