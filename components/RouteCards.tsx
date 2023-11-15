@@ -1,15 +1,13 @@
 "use client"
 
-import { getHosts, getRouteUpstreams } from "@/lib/utils";
-import { Button } from "./ui/button";
+import { getHosts, getRouteUpstreams, getUpstreamRequests } from "@/lib/utils";
+import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "./ui/card";
-import { randomInt } from "crypto";
-
 
 export default function RouteCards({ routes }: { routes: Array<Route> }) {
 
-    let handleClick = () => {
-        console.log('click');
+    let handleClick = (route: Route) => {
+        console.log(JSON.stringify(route))
     }
 
 
@@ -29,8 +27,8 @@ export default function RouteCards({ routes }: { routes: Array<Route> }) {
                         <p className="text-sm text-muted-foreground">{getRouteUpstreams(route)?.map((upstream => upstream.dial))}</p>
                     </CardContent>
                     <CardFooter className="flex justify-between">
-                        <Button variant="secondary" onClick={handleClick}>Edit</Button>
-                        <Button variant="destructive" onClick={handleClick}>Delete</Button>
+                        <Button onClick={() => {handleClick(route)}}>Edit</Button>
+                        <Button variant="destructive" onClick={() => {handleClick(route)}}>Edit</Button>
                     </CardFooter>
                 </Card>
             </div>

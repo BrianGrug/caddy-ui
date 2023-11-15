@@ -29,15 +29,6 @@ export async function getConfig() {
   return caddyConfig;
 }
 
-export async function getRoutes(index: number = 0) {
-  const res = await fetch(`http://192.168.1.69:2019:config/apps/http/servers/srv${index}/routes/`, { cache: 'no-store' });
-
-  if(!res.ok)
-   throw new Error('Failed to fetch routes. Please check the network and try again.');
-
-   return res.json();
-}
-
 export async function removeRoute(route: Route, index: number = 0) {
   console.log(route);
   const res = await fetch(`http://192.168.1.69:2019/config/apps/http/servers/srv${index}/routes/`, {
@@ -51,4 +42,16 @@ export async function removeRoute(route: Route, index: number = 0) {
   if(!res.ok) throw new Error('Failed to remove route. Please check the network and try again.');
 
   return res.json();
+}
+
+export async function getUpstreamRequests(route: Route) {
+  let upstreams: UpstreamRequest[] = await fetch(`http://192.168.1.69:2019/reverse_proxy/upstreams`, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  }).then(res => res.json());
+
+  if(!upstreams) throw new Error('Failed to fetch upstreams. Please check the network and try again.')
+
+  return upstreams;
 }

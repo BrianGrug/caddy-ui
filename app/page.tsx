@@ -1,7 +1,4 @@
 import RouteCards from '@/components/RouteCards';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { getHosts, getRouteUpstreams } from '@/lib/utils';
 
 async function getRoutes() {
   let res = await fetch('http://localhost:3000/api/caddy/routes');

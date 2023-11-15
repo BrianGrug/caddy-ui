@@ -15,10 +15,6 @@ interface Match {
 interface Handle {
     handler: string;
     upstreams?: Upstream[];
-}
-
-interface Handle {
-    handler: string;
     routes?: Route[];
 }
 
@@ -26,14 +22,23 @@ interface Upstream {
     dial: string;
 }
 
+interface UpstreamRequest {
+    address: string;
+    num_requests: number;
+    fails: number;
+}
+
 interface Provider {
     api_token: string;
     name: string;
 }
 
-interface Policies {
-    subjects: string[];
-    issuer: Issuer;
+interface DNS {
+    provider: Provider;
+}
+
+interface Challenges {
+    dns: DNS;
 }
 
 interface Issuer {
@@ -42,12 +47,14 @@ interface Issuer {
     module: string;
 }
 
-interface Challenges {
-    dns: DNS;
+interface Policies {
+    subjects: string[];
+    issuer: Issuer;
 }
 
-interface DNS {
-    provider: Provider;
+interface Server {
+    listen: string[];
+    routes: Route[];
 }
 
 interface Apps {
