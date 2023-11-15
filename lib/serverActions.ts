@@ -1,10 +1,9 @@
 'use server';
   
   export async function getConfig() {
-    const res = await fetch('http://192.168.1.69:2019/config/');
-  
-    if (!res.ok)
+    const res = await fetch('http://192.168.1.69:2019/config/').catch(() => {
       throw new Error('Failed to fetch caddy config. Please check the network and try again.');
+    });
   
     let caddyConfig: CaddyConfig = await res.json();
   
@@ -12,11 +11,10 @@
   }
   
   export async function getServer() {
-    const res = await fetch('http://localhost:3000/api/caddy/servers');
-  
-    if (!res.ok)
-      throw new Error('Failed to fetch caddy config. Please check the network and try again.');
-  
+    const res = await fetch('http://localhost:3000/api/caddy/servers').catch(() => {
+      throw new Error('Failed to fetch caddy servers. Please check the network and try again.');
+    });
+
     let server: Server = await res.json();
     return server;
   }
@@ -29,10 +27,10 @@
       },
       body: JSON.stringify(route)
   
-    })
-  
-    if (!res.ok) throw new Error('Failed to remove route. Please check the network and try again.');
-  
+    }).catch((e) => {
+      throw new Error('Failed to remove route. Please check the network and try again.');
+    });
+    
     return res.json();
   }
   
@@ -41,15 +39,17 @@
       headers: {
         'Content-Type': 'application/json'
       },
-    }).then(res => res.json());
-  
-    if (!upstreams) throw new Error('Failed to fetch upstreams. Please check the network and try again.')
-  
+    }).then(res => res.json()).catch(() => {
+      throw new Error('Failed to fetch upstream requests. Please check the network and try again.');
+    });
+    
     return upstreams;
   }
   
   export async function getRoutes() {
-    let res = await fetch('http://localhost:3000/api/caddy/routes', { cache: 'no-cache'});
-    if (!res.ok) throw new Error('Failed to fetch routes');
+    let res = await fetch('http://localhost:3000/api/caddy/routes', { cache: 'no-cache'}).catch(() => {
+      throw new Error('Failed to fetch routes. Please check the network and try again.');
+    });
+
     return await res.json();
   }

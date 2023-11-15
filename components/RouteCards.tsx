@@ -7,14 +7,15 @@ import { deleteRoute } from '@/lib/serverActions';
 
 export default function RouteCards({ routes }: { routes: Array<Route> }) {
 
-    async function handleDelete(route: Route) {
-       await deleteRoute(route);
+    const handleDelete = async (route: Route) => {
+        let res = await deleteRoute(route);
+        console.log(res);
     }
 
-    
+
     let handleClick = (route: Route) => {
         console.log(route);
-     }
+    }
 
     return (
         routes.map((route, index) => (
@@ -32,8 +33,8 @@ export default function RouteCards({ routes }: { routes: Array<Route> }) {
                         <p className="text-sm text-muted-foreground">{getRouteUpstreams(route)?.map((upstream => upstream.dial))}</p>
                     </CardContent>
                     <CardFooter className="flex justify-between">
-                        <Button onClick={() => {handleClick(route)}}>Edit</Button>
-                        <Button variant="destructive" onClick={() => {handleDelete(route)}}>Delete</Button>
+                        <Button onClick={() => { handleClick(route) }}>Edit</Button>
+                        <Button variant="destructive" onClick={() => { handleDelete(route) }}>Delete</Button>
                     </CardFooter>
                 </Card>
             </div>

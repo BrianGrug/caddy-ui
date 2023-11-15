@@ -65,7 +65,7 @@ interface Apps {
             [key: string]: Server;
         };
     };
-    tls: {
+    tls?: {
         automation: {
             policies: Policies[];
         };
@@ -86,7 +86,7 @@ interface Logging {
 }
 
 type CaddyConfig = {
+    admin?: Admin;
     apps: Apps;
-    admin: Admin;
     logging?: Logging;
 };

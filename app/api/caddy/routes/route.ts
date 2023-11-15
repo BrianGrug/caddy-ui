@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
     let caddyConfig = await getConfig();
+
     let routes: Array<Route> = [];
 
     caddyConfig.apps.http.servers.srv0.routes.forEach((route: Route) => {
@@ -23,11 +24,9 @@ export async function DELETE(req: Request) {
     let routes: Route[] = await getRoutes();
     let routesMap: Match[] = routes.map(r => r.match[0]);
 
-    console.log(route)
+    let index = routesMap.findIndex((r) => (r.host === route.match[0].host))
 
-    let index = routesMap.findIndex((r) => (r.host[0] === route.match[0].host[0]))
-
-    if(index === -1) return new NextResponse(JSON.stringify({error: 'Route not found'}), {
+    if(index = -1) return new NextResponse(JSON.stringify({error: 'Route not found'}), {
         status: 404,
         headers: {
             'Content-Type': 'application/json',
