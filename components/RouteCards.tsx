@@ -1,13 +1,13 @@
 "use client"
 
-import { getHosts, getRouteUpstreams, getUpstreamRequests } from "@/lib/utils";
+import { deleteRoute, getHosts, getRouteUpstreams, getUpstreamRequests } from "@/lib/utils";
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "./ui/card";
 
 export default function RouteCards({ routes }: { routes: Array<Route> }) {
 
     let handleClick = (route: Route) => {
-        console.log(JSON.stringify(route))
+       deleteRoute(route);
     }
 
 
@@ -28,7 +28,7 @@ export default function RouteCards({ routes }: { routes: Array<Route> }) {
                     </CardContent>
                     <CardFooter className="flex justify-between">
                         <Button onClick={() => {handleClick(route)}}>Edit</Button>
-                        <Button variant="destructive" onClick={() => {handleClick(route)}}>Edit</Button>
+                        <Button variant="destructive" onClick={() => {handleClick(route)}}>Delete</Button>
                     </CardFooter>
                 </Card>
             </div>

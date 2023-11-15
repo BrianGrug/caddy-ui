@@ -19,9 +19,7 @@ export async function POST(req: Request) {
     let routeUpstreams: Upstream[] = getRouteUpstreams(route);
 
     let upstreamsRequested: UpstreamRequest[] = upstreams.filter(upstream => {
-        return routeUpstreams.find(routeUpstream => {
-            return routeUpstream.dial === upstream.address;
-        });
+        return routeUpstreams.find(routeUpstream => routeUpstream.dial === upstream.address);
     });
 
     return new NextResponse(JSON.stringify(upstreamsRequested), {
