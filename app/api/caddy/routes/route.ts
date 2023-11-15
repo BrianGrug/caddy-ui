@@ -15,7 +15,7 @@ export async function GET() {
         headers: {
             'Content-Type': 'application/json',
         },
-    }); 
+    });
 }
 
 export async function DELETE(req: Request) {
@@ -24,5 +24,5 @@ export async function DELETE(req: Request) {
         headers: {
             'Content-Type': 'application/json',
         },
-    }); 
+    });
 }

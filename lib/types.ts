@@ -29,7 +29,7 @@ interface UpstreamRequest {
 }
 
 interface Provider {
-    api_token: string;
+    api_token?: string;
     name: string;
 }
 
@@ -39,6 +39,8 @@ interface DNS {
 
 interface Challenges {
     dns: DNS;
+    email: string;
+    module: string;
 }
 
 interface Issuer {
@@ -49,7 +51,7 @@ interface Issuer {
 
 interface Policies {
     subjects: string[];
-    issuer: Issuer;
+    issuers: Issuer[];
 }
 
 interface Server {
@@ -70,6 +72,21 @@ interface Apps {
     };
 }
 
+interface Admin {
+    listen: string;
+
+}
+
+interface Logging {
+    logs: {
+        default: {
+            level: string;
+        };
+    };
+}
+
 type CaddyConfig = {
     apps: Apps;
+    admin: Admin;
+    logging?: Logging;
 };
