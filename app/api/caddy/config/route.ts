@@ -1,5 +1,5 @@
 // Import the NextJS API route handler
-import { getConfig } from '@/lib/utils';
+import { getConfig } from '@/lib/serverActions';
 import { NextResponse } from 'next/server';
 
 // Define the route handler function

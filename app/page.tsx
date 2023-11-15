@@ -1,13 +1,6 @@
 import RouteCards from '@/components/RouteCards';
+import { getRoutes } from '@/lib/serverActions';
 
-async function getRoutes() {
-  let res = await fetch('http://localhost:3000/api/caddy/routes');
-  if (!res.ok) throw new Error('Failed to fetch routes');
-  return await res.json();
-}
-function handleClick() {
-  console.log('click');
-}
 export default async function Home() {
   let routes: Array<Route> = await getRoutes();
 

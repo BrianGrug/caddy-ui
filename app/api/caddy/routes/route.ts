@@ -1,4 +1,4 @@
-import { getConfig, getServer } from '@/lib/utils';
+import { getConfig, getRoutes, getServer } from '@/lib/serverActions';
 import { NextApiRequest } from 'next';
 import { NextResponse } from 'next/server';
 
@@ -19,20 +19,20 @@ export async function GET() {
 }
 
 export async function DELETE(req: Request) {
-
     let route: Route = await req.json();
-    let routes: Server[] = await getServer();
+    let routes: Route[] = await getRoutes();
+    let routesMap: Match[] = routes.map(r => r.match[0]);
 
-    let indexOfRoute = routes.findIndex((routeToFind: Route) => route.handle == routeToFind.handle);
+    console.log(route)
 
-    console.log(indexOfRoute)
+    let index = routesMap.findIndex((r) => (r.host[0] === route.match[0].host[0]))
 
-    return new NextResponse(JSON.stringify("Test"), {
-        status: 200,
+    if(index === -1) return new NextResponse(JSON.stringify({error: 'Route not found'}), {
+        status: 404,
         headers: {
             'Content-Type': 'application/json',
         },
-    }); 
+    })
 
     const res = await fetch(`http://192.168.1.69:2019/config/apps/http/servers/srv0/routes/${index}`, {
         method: 'DELETE',
@@ -41,8 +41,9 @@ export async function DELETE(req: Request) {
         },
         body: JSON.stringify(route)
       });
+
     
-    return new NextResponse(JSON.stringify("Test"), {
+    return new NextResponse(JSON.stringify(JSON.stringify(res.body)), {
         status: 200,
         headers: {
             'Content-Type': 'application/json',

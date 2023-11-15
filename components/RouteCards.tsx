@@ -1,15 +1,20 @@
 "use client"
 
-import { deleteRoute, getHosts, getRouteUpstreams, getUpstreamRequests } from "@/lib/utils";
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "./ui/card";
+import { getHosts, getRouteUpstreams } from '@/lib/utils';
+import { deleteRoute } from '@/lib/serverActions';
 
 export default function RouteCards({ routes }: { routes: Array<Route> }) {
 
-    let handleClick = (route: Route) => {
-       deleteRoute(route);
+    async function handleDelete(route: Route) {
+       await deleteRoute(route);
     }
 
+    
+    let handleClick = (route: Route) => {
+        console.log(route);
+     }
 
     return (
         routes.map((route, index) => (
@@ -28,7 +33,7 @@ export default function RouteCards({ routes }: { routes: Array<Route> }) {
                     </CardContent>
                     <CardFooter className="flex justify-between">
                         <Button onClick={() => {handleClick(route)}}>Edit</Button>
-                        <Button variant="destructive" onClick={() => {handleClick(route)}}>Delete</Button>
+                        <Button variant="destructive" onClick={() => {handleDelete(route)}}>Delete</Button>
                     </CardFooter>
                 </Card>
             </div>

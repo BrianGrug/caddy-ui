@@ -1,4 +1,5 @@
-import { getConfig, getRouteUpstreams, getUpstreamRequests } from '@/lib/utils';
+import { getUpstreamRequests } from '@/lib/serverActions';
+import { getRouteUpstreams } from '@/lib/utils';
 import { NextApiRequest } from 'next';
 import { NextResponse } from 'next/server';
 
