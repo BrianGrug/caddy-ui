@@ -1,8 +1,8 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
- 
+
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 export function getHosts(route: Route) {
@@ -18,19 +18,37 @@ export function getRouteUpstreams(route: Route, index: number = 0) {
   return test;
 }
 
-export async function getRoutes() {
-  const res = await fetch('http://192.168.1.69:2019/config/', { cache: 'no-store' })
+export async function getConfig() {
+  const res = await fetch('http://192.168.1.69:2019/config/', { cache: 'no-store' });
 
-  if (!res.ok) {
-      throw new Error('Failed to fetch caddy config. Please check the network and try again.')
-  }
+  if (!res.ok) 
+    throw new Error('Failed to fetch caddy config. Please check the network and try again.');
 
   let caddyConfig: CaddyConfig = await res.json();
 
   return caddyConfig;
 }
 
-export async function removeRoute(route: Route) {
-  console.log(route)
-  const res = await fetch('http://192.168.1.69:2019/config/apps/http/servers/srv0/routes/')
+export async function getRoutes(index: number = 0) {
+  const res = await fetch(`http://192.168.1.69:2019:config/apps/http/servers/srv${index}/routes/`, { cache: 'no-store' });
+
+  if(!res.ok)
+   throw new Error('Failed to fetch routes. Please check the network and try again.');
+
+   return res.json();
+}
+
+export async function removeRoute(route: Route, index: number = 0) {
+  console.log(route);
+  const res = await fetch(`http://192.168.1.69:2019/config/apps/http/servers/srv${index}/routes/`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(route)
+  });
+
+  if(!res.ok) throw new Error('Failed to remove route. Please check the network and try again.');
+
+  return res.json();
 }
