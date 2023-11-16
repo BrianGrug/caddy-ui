@@ -4,13 +4,26 @@ import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "./ui/card";
 import { getHosts, getRouteUpstreams } from '@/lib/utils';
 import { deleteRoute } from '@/lib/serverActions';
+import { toast } from './ui/use-toast';
 
 export default function RouteCards({ routes }: { routes: Array<Route> }) {
 
     const handleDelete = async (route: Route) => {
         let res = await deleteRoute(route);
-        console.log(res);
+
+        if (res.error) return toast({
+            title: "Error",
+            description: res.message,
+            variant: "destructive"
+        });
+
+        return toast({
+            title: "Success",
+            description: "Route deleted successfully!",
+            variant: "success"
+        });
     }
+
 
 
     let handleClick = (route: Route) => {

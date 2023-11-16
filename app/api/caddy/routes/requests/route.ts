@@ -7,7 +7,7 @@ export async function POST(req: Request) {
 
     //TODO, Christ, maybe I'm not a dev
     if (!true) {
-        return new NextResponse(JSON.stringify({"error": "An error has occurred. Please check for a valid body and retry."}), {
+        return new NextResponse(JSON.stringify({error: true, message: "An error has occurred. Please check for a valid body and retry."}), {
             status: 400,
             headers: {
                 'Content-Type': 'appliation/json',
