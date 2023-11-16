@@ -41,7 +41,7 @@ export default function RouteCards({ routes }: { routes: Array<Route> }) {
                     </CardHeader>
                     <CardContent>
                         <p className="text-sm font-medium leading-none">
-                            Proxying to
+                            Tunneling to
                         </p>
                         <p className="text-sm text-muted-foreground">{getRouteUpstreams(route)?.map((upstream => upstream.dial))}</p>
                     </CardContent>
