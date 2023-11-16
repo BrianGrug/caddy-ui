@@ -10,17 +10,18 @@ import React, { useState } from 'react';
 class RouteCards extends React.Component<{routes: Route[]}> {
     constructor(props: { routes: Route[] }) {
         super(props);
+        this.handleClick = this.handleClick.bind(this);
     }
 
     state = {
         routes: this.props.routes,
     }
 
-    componentDidUpdate(prevProps: Readonly<{ routes: Route[]; }>, prevState: Readonly<{}>, snapshot?: any): void {
-        if (prevProps.routes !== this.props.routes) {
+    componentDidUpdate(prevProps: Readonly<{ routes: Route[]; }>, prevState: Readonly<{}>) {
+        if (this.props.routes !== prevProps.routes) {
             this.setState({
                 routes: this.props.routes
-            })
+            });
         }
     }
 
@@ -45,6 +46,7 @@ class RouteCards extends React.Component<{routes: Route[]}> {
             variant: "success"
         });
     }
+
 
 
 

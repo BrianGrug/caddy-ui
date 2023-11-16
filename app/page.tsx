@@ -1,9 +1,26 @@
-import RouteCards from '@/components/RouteCards';
+"use client"
+
 import { CardTitle, Card, CardDescription, CardHeader, CardContent } from '@/components/ui/card';
 import { getRoutes } from '@/lib/serverActions';
+import RouteCards from '@/components/RouteCards';
+import { useEffect, useState } from 'react';
 
-export default async function Home() {
+async function fetchRoutes() {
   let routes: Route[] = await getRoutes();
+  return routes;
+}
+
+export default function Home() {
+
+  useEffect(() => {
+    async function fetchData() {
+      const data: Route[] = await fetchRoutes();
+      setRoutes(data);
+    }
+    fetchData();
+  }, []);
+
+  const [routes, setRoutes] = useState<Route[]>([])
 
   return (
     <main>
