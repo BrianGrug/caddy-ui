@@ -32,8 +32,8 @@ export default function RouteCards({ routes }: { routes: Array<Route> }) {
 
     return (
         routes.map((route, index) => (
-            <div key={index}>
-                <Card key={index}>
+            <div key={index} className='p-2'>
+                <Card key={index} className='w-[300px]'>
                     <CardHeader>
                         <CardTitle>{getHosts(route).values().next().value}</CardTitle>
                         {getHosts(route).map((route => <CardDescription key={route}>{route}</ CardDescription>))}
