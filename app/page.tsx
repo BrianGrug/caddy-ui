@@ -3,7 +3,7 @@ import { CardTitle, Card, CardDescription, CardHeader, CardContent } from '@/com
 import { getRoutes } from '@/lib/serverActions';
 
 export default async function Home() {
-  let routes: Array<Route> = await getRoutes();
+  let routes: Route[] = await getRoutes();
 
   return (
     <main>
