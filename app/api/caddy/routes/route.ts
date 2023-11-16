@@ -3,7 +3,7 @@ import { NextApiRequest } from 'next';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-    let caddyConfig = await getConfig();
+    let caddyConfig: CaddyConfig = await getConfig();
 
     let routes: Array<Route> = [];
 
@@ -22,11 +22,14 @@ export async function GET() {
 export async function DELETE(req: Request) {
     let route: Route = await req.json();
     let routes: Route[] = await getRoutes();
-    let routesMap: Match[] = routes.map(r => r.match[0]);
+    let routesMap: Route[] = routes.map(r => r);
+    let hostsMap = routesMap.map(r => r.match[0].host);
 
-    let index = routesMap.findIndex((r) => (r.host === route.match[0].host))
-
-    if(index = -1) return new NextResponse(JSON.stringify({error: 'Route not found'}), {
+    let targetRoute: Route = routesMap.filter((r) => (JSON.stringify(r.match[0]) === JSON.stringify(route.match[0]))).values().next().value;
+    
+    let index = routesMap.indexOf(targetRoute);
+    
+    if(index == -1) return new NextResponse(JSON.stringify({error: 'Route not found'}), {
         status: 404,
         headers: {
             'Content-Type': 'application/json',
@@ -38,7 +41,7 @@ export async function DELETE(req: Request) {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(route)
+        body: JSON.stringify({route, error: false})
       });
 
     

@@ -1,7 +1,9 @@
 'use server';
   
   export async function getConfig() {
-    const res = await fetch('http://192.168.1.69:2019/config/').catch(() => {
+    const res = await fetch('http://192.168.1.69:2019/config/', {
+      cache: 'no-cache',
+    }).catch(() => {
       throw new Error('Failed to fetch caddy config. Please check the network and try again.');
     });
   
@@ -25,12 +27,14 @@
       headers: {
         'Content-Type': 'application/json'
       },
+      cache: 'no-cache',
       body: JSON.stringify(route)
   
     }).catch((e) => {
+      console.log(e)
       throw new Error('Failed to remove route. Please check the network and try again.');
     });
-    
+
     return res.json();
   }
   
@@ -47,7 +51,7 @@
   }
   
   export async function getRoutes() {
-    let res = await fetch('http://localhost:3000/api/caddy/routes', { cache: 'no-cache'}).catch(() => {
+    let res = await fetch('http://localhost:3000/api/caddy/routes', { cache: 'no-cache' }).catch(() => {
       throw new Error('Failed to fetch routes. Please check the network and try again.');
     });
 
