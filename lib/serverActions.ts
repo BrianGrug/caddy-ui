@@ -21,21 +21,15 @@
     return server;
   }
   
-  export async function deleteRoute(route: Route, index: number = 0) {
-    let res = await fetch("http://localhost:3000/api/caddy/routes", {
+  export async function deleteRoute(url: any, { arg }: { arg: Route }) {
+    return fetch(url, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
       },
       cache: 'no-cache',
-      body: JSON.stringify(route)
-  
-    }).catch((e) => {
-      console.log(e)
-      throw new Error('Failed to remove route. Please check the network and try again.');
-    });
-
-    return res.json();
+      body: JSON.stringify(arg)
+    }).then((res) => res.json());
   }
   
   export async function getUpstreamRequests(route: Route) {
