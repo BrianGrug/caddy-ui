@@ -1,26 +1,22 @@
 "use client"
 
-import { CardTitle, Card, CardDescription, CardHeader, CardContent } from '@/components/ui/card';
-import { getRoutes } from '@/lib/serverActions';
+import { CardTitle, Card, CardDescription, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
 import RouteCards from '@/components/RouteCards';
-import { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { useRoutes } from '@/lib/clientActions';
 
-async function fetchRoutes() {
-  let routes: Route[] = await getRoutes();
-  return routes;
-}
 
 export default function Home() {
 
-  useEffect(() => {
-    async function fetchData() {
-      const data: Route[] = await fetchRoutes();
-      setRoutes(data);
-    }
-    fetchData();
-  }, []);
+  const { data: routes, error, isLoading } = useRoutes();
+  let routesMap: Route[] = routes as Route[];
 
-  const [routes, setRoutes] = useState<Route[]>([])
+  if (error) return <div>Error loading routes</div>
+  if (isLoading) return (
+    <div className='justify-center'>
+      Loading...
+    </div>
+  )
 
   return (
     <main>
@@ -31,14 +27,17 @@ export default function Home() {
             <CardDescription>Amount of configured routes</CardDescription>
           </CardHeader>
           <CardContent className='flex items-center'>
-            <div className=''>
-              <p className='text-xl font-semibold translate-y-2'>{routes.length}</p>
+            <div>
+              <p className='text-xl font-semibold translate-y-2'>{routesMap.length}</p>
             </div>
           </CardContent>
+          <CardFooter>
+            <Button className='translate-y-2.5'>Create</Button>
+          </CardFooter>
         </Card>
       </div>
       <div className='grid grid-flow-row-dense md:grid-cols-6 sm:grid-cols-2 p-2'>
-        <RouteCards routes={routes} />
+        <RouteCards routes={routes as Route[]} />
       </div>
     </main>
   )
