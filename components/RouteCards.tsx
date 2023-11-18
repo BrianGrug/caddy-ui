@@ -10,8 +10,9 @@ import { deleteRoute } from '@/lib/clientActions';
 import { Dialog, DialogContent, DialogHeader } from './ui/dialog';
 import { DialogDescription, DialogTitle } from '@radix-ui/react-dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel } from './ui/form';
-import { useForm } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { Input } from './ui/input';
+import { get, set } from 'lodash';
 
 export default function RouteCards({ routes }: { routes: Route[] }) {
 
@@ -41,7 +42,7 @@ export default function RouteCards({ routes }: { routes: Route[] }) {
 
     return (
         <>
-            <EditRouteDialog route={route} />
+            {route && <EditRouteDialog route={route} />}
             {
                 routes.map((route, index) => (
                     <div key={index} className='p-2'>
@@ -68,49 +69,42 @@ export default function RouteCards({ routes }: { routes: Route[] }) {
     )
 }
 
-export function EditRouteDialog({ route }: { route?: Route }) {
+export function EditRouteDialog({ route }: { route: Route }) {
+    const [modifiedRoute, setRoute] = useState(route);
+    let validHosts: any[] = getHosts(route);
+    let validUpstreams: any[] = getRouteUpstreams(route).map((upstream) => upstream.dial);
+
     const form = useForm({
-        defaultValues: {
-            handler: route?.handle[0].handler,
-            upstreams: route?.handle[0].upstreams,
-            //hosts: route?.match[0].host,
+        values: {
+            handler: route.handle[0].routes[0].handle[0].handler,
+            upstreams: validUpstreams,
+            hosts: validHosts,
         }
     });
 
-    let test: RouteHandle = {
-        handle: [
-            {
-                handler: 'subroutes',
-                routes: [
-                    {
-                        handle: [
-                            {
-                                handler: 'reverse_proxy',
-                                upstreams: [
-                                    {
-                                        dial: 'localhost:8080'
-                                    }
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            }
-        ],
+    const { fields: upstreams, append: appendUpstreams } = useFieldArray({
+        control: form.control,
+        name: "upstreams",
+    })
 
-        match: [
-            {
-                host: [
-                    'example.com'
-                ]
-            }
-        ]
+    const { fields: hosts, append: appendHosts } = useFieldArray({
+        control: form.control,
+        name: "hosts",
+    })
+    
+    let onSubmit = ((data: any) => {
+
+    })
+
+    console.log(getHosts(route))
+
+    let handleChange = (value: any, path: any) => {
+        let updatedRoute = set(modifiedRoute, path, value.target.value);
+        setRoute(updatedRoute);
+        console.log(value.target.name, value.target.value)
+        form.setValue(value.target.name, value.target.value)
     }
 
-    let onSubmit = ((data: any) => {
-        console.log('Original Route', JSON.stringify(route))
-        console.log(data)
-    })
 
     return (
         <Dialog open={route as Route != null}>
@@ -124,46 +118,47 @@ export function EditRouteDialog({ route }: { route?: Route }) {
                                 <FormItem>
                                     <FormLabel>Handler</FormLabel>
                                     <FormControl>
-                                        <Input {...field} value={route?.handle[0].handler} />
+                                        <Input {...field} onChange={(value) => handleChange(value, `modifiedRoute.handle[0].handler`)} />
                                     </FormControl>
                                 </FormItem>
                             )}
 
                         ></FormField>
 
-                        {route ? getRouteUpstreams(route)?.map((upstream, index) => (
+                        {upstreams.map((upstream, index) => (
                             <FormField
-                                key={index}
+                                key={upstream.id}
                                 control={form.control}
-                                name="upstreams"
+                                name={`upstreams.${index}`}
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Upstream {index + 1}</FormLabel>
                                         <FormControl>
-                                            <Input {...field} value={upstream.dial} />
+                                            <Input {...field} onChange={(value) => handleChange(value, `modifiedRoute.handle[0].upstreams`)} />
                                         </FormControl>
                                     </FormItem>
                                 )}
                             >
                             </FormField>
-                        )) : <></>}
+                        ))}
 
-                        {route ? getHosts(route)?.map((host, index) => (
+                        {hosts.map((host, index) => (
                             <FormField
-                                key={index}
+                                key={host.id}
                                 control={form.control}
-                                name="hosts"
+                                name={`hosts.${index}`}
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Host {index + 1}</FormLabel>
                                         <FormControl>
-                                            <Input {...field} defaultValue={host} />
+                                            <Input {...field} onChange={(value) => handleChange(value, `modifiedRoute.handle[0].hosts`)} />
                                         </FormControl>
                                     </FormItem>
                                 )}
                             >
                             </FormField>
-                        )) : <></>}
+                        ))}
+
                         <Button type="submit">Save</Button>
                     </form>
                 </Form>

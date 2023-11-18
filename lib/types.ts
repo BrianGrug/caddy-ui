@@ -15,8 +15,8 @@ interface Match {
 
 interface Handle {
     handler: string;
-    upstreams?: Upstream[];
-    routes?: Route[];
+    upstreams: Upstream[];
+    routes: Route[];
 }
 
 interface Upstream {
