@@ -6,13 +6,14 @@ import { getHosts, getRouteUpstreams } from '@/lib/utils';
 import { toast } from './ui/use-toast';
 import React, { useState } from 'react';
 import useSWRMutation from 'swr/mutation';
-import { deleteRoute } from '@/lib/clientActions';
+import { deleteRoute, updateRoute } from '@/lib/clientActions';
 import { Dialog, DialogContent, DialogHeader } from './ui/dialog';
 import { DialogDescription, DialogTitle } from '@radix-ui/react-dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel } from './ui/form';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { Input } from './ui/input';
 import { get, set } from 'lodash';
+import { getRoutes } from '@/lib/serverActions';
 
 export default function RouteCards({ routes }: { routes: Route[] }) {
 
@@ -70,7 +71,26 @@ export default function RouteCards({ routes }: { routes: Route[] }) {
 }
 
 export function EditRouteDialog({ route }: { route: Route }) {
+    let index = getHosts(route).indexOf(route.match[0].host[0]);
+
     const [modifiedRoute, setRoute] = useState(route);
+    const { trigger: pushUpdate } = useSWRMutation(`/api/caddy/routes/${index}`, updateRoute, {
+        onError: () => {
+            return toast({
+                title: "Error",
+                description: "There was an error updating the route",
+                variant: "destructive"
+            });
+        },
+        onSuccess: () => {
+            toast({
+                title: "Success",
+                description: "Route updated successfully!",
+                variant: "success"
+            });
+        }
+    });
+
     let validHosts: any[] = getHosts(route);
     let validUpstreams: any[] = getRouteUpstreams(route).map((upstream) => upstream.dial);
 
@@ -93,14 +113,12 @@ export function EditRouteDialog({ route }: { route: Route }) {
     })
     
     let onSubmit = ((data: any) => {
-        console.log(modifiedRoute)
+        pushUpdate(modifiedRoute);
     })
 
 
     let handleChange = (value: any, path: any) => {
-        console.log(path)
         let updatedRoute = set(modifiedRoute, path, value.target.value);
-        console.log(updatedRoute)
         setRoute(updatedRoute);
         form.setValue(value.target.name, value.target.value)
     }
@@ -118,7 +136,7 @@ export function EditRouteDialog({ route }: { route: Route }) {
                                 <FormItem>
                                     <FormLabel>Handler</FormLabel>
                                     <FormControl>
-                                        <Input {...field} onChange={(value) => handleChange(value, `modifiedRoute.handle[0].handler`)} />
+                                        <Input {...field} onChange={(value) => handleChange(value, `handle[0].handler`)} />
                                     </FormControl>
                                 </FormItem>
                             )}
@@ -127,14 +145,14 @@ export function EditRouteDialog({ route }: { route: Route }) {
 
                         {upstreams.map((upstream, index) => (
                             <FormField
-                                key={upstream.id}
+                                key={index}
                                 control={form.control}
                                 name={`upstreams.${index}`}
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Upstream {index + 1}</FormLabel>
                                         <FormControl>
-                                            <Input {...field} onChange={(value) => handleChange(value, `handle[0].routes[0].handle[0].upstreams[${index}]`)} />
+                                            <Input {...field} onChange={(value) => handleChange(value, `handle[0].routes[0].handle[0].upstreams[${index}].dial`)} />
                                         </FormControl>
                                     </FormItem>
                                 )}
@@ -143,7 +161,7 @@ export function EditRouteDialog({ route }: { route: Route }) {
 
                         {hosts.map((host, index) => (
                             <FormField
-                                key={host.id}
+                                key={index}
                                 control={form.control}
                                 name={`hosts.${index}`}
                                 render={({ field }) => (

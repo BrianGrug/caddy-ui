@@ -51,3 +51,14 @@
 
     return await res.json();
   }
+
+  export async function updateRoute(index: number, route: Route) {
+    return fetch(`http://192.168.1.69:2019/config/apps/http/servers/srv0/routes/${index}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      cache: 'no-cache',
+      body: JSON.stringify(route)
+    }).then((res) => res.json()).catch((err) => console.log(err));
+  }
