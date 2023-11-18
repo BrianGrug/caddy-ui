@@ -93,15 +93,15 @@ export function EditRouteDialog({ route }: { route: Route }) {
     })
     
     let onSubmit = ((data: any) => {
-
+        console.log(modifiedRoute)
     })
 
-    console.log(getHosts(route))
 
     let handleChange = (value: any, path: any) => {
+        console.log(path)
         let updatedRoute = set(modifiedRoute, path, value.target.value);
+        console.log(updatedRoute)
         setRoute(updatedRoute);
-        console.log(value.target.name, value.target.value)
         form.setValue(value.target.name, value.target.value)
     }
 
@@ -134,12 +134,11 @@ export function EditRouteDialog({ route }: { route: Route }) {
                                     <FormItem>
                                         <FormLabel>Upstream {index + 1}</FormLabel>
                                         <FormControl>
-                                            <Input {...field} onChange={(value) => handleChange(value, `modifiedRoute.handle[0].upstreams`)} />
+                                            <Input {...field} onChange={(value) => handleChange(value, `handle[0].routes[0].handle[0].upstreams[${index}]`)} />
                                         </FormControl>
                                     </FormItem>
                                 )}
-                            >
-                            </FormField>
+                            />
                         ))}
 
                         {hosts.map((host, index) => (
@@ -151,12 +150,11 @@ export function EditRouteDialog({ route }: { route: Route }) {
                                     <FormItem>
                                         <FormLabel>Host {index + 1}</FormLabel>
                                         <FormControl>
-                                            <Input {...field} onChange={(value) => handleChange(value, `modifiedRoute.handle[0].hosts`)} />
+                                            <Input {...field} onChange={(value) => handleChange(value, `match[0].host[${index}]`)} />
                                         </FormControl>
                                     </FormItem>
                                 )}
-                            >
-                            </FormField>
+                            />
                         ))}
 
                         <Button type="submit">Save</Button>
