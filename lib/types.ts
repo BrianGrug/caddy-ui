@@ -4,8 +4,9 @@ interface Server {
 }
 
 interface Route {
-    match: Match[];
     handle: Handle[];
+    match: Match[];
+    terminal?: boolean;
 }
 
 interface Match {

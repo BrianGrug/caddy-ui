@@ -69,31 +69,69 @@ export default function RouteCards({ routes }: { routes: Route[] }) {
 }
 
 export function EditRouteDialog({ route }: { route?: Route }) {
-    const form = useForm();
+    const form = useForm({
+        defaultValues: {
+            handler: route?.handle[0].handler,
+            upstreams: route?.handle[0].upstreams,
+            //hosts: route?.match[0].host,
+        }
+    });
+
+    let test: RouteHandle = {
+        handle: [
+            {
+                handler: 'subroutes',
+                routes: [
+                    {
+                        handle: [
+                            {
+                                handler: 'reverse_proxy',
+                                upstreams: [
+                                    {
+                                        dial: 'localhost:8080'
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+
+        match: [
+            {
+                host: [
+                    'example.com'
+                ]
+            }
+        ]
+    }
 
     let onSubmit = ((data: any) => {
-        console.log(JSON.stringify(data))
+        console.log('Original Route', JSON.stringify(route))
+        console.log(data)
     })
 
-    let targetRoute: Route = route as Route;
     return (
-        <Dialog open={targetRoute != null}>
+        <Dialog open={route as Route != null}>
             <DialogContent className='sm:max-w-[425px]'>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)}>
                         <FormField
                             control={form.control}
-                            name="Handler"
+                            name="handler"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Handler</FormLabel>
                                     <FormControl>
-                                        <Input {...field} defaultValue={route?.handle[0].handler} />
+                                        <Input {...field} value={route?.handle[0].handler} />
                                     </FormControl>
                                 </FormItem>
                             )}
+
                         ></FormField>
-                        {route ? getRouteUpstreams(targetRoute)?.map((upstream, index) => (
+
+                        {route ? getRouteUpstreams(route)?.map((upstream, index) => (
                             <FormField
                                 key={index}
                                 control={form.control}
@@ -102,7 +140,7 @@ export function EditRouteDialog({ route }: { route?: Route }) {
                                     <FormItem>
                                         <FormLabel>Upstream {index + 1}</FormLabel>
                                         <FormControl>
-                                            <Input {...field} defaultValue={upstream.dial} />
+                                            <Input {...field} value={upstream.dial} />
                                         </FormControl>
                                     </FormItem>
                                 )}
@@ -110,14 +148,14 @@ export function EditRouteDialog({ route }: { route?: Route }) {
                             </FormField>
                         )) : <></>}
 
-                        {route ? getHosts(targetRoute)?.map((host, index) => (
+                        {route ? getHosts(route)?.map((host, index) => (
                             <FormField
                                 key={index}
                                 control={form.control}
-                                name="upstreams"
+                                name="hosts"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Upstream {index + 1}</FormLabel>
+                                        <FormLabel>Host {index + 1}</FormLabel>
                                         <FormControl>
                                             <Input {...field} defaultValue={host} />
                                         </FormControl>
