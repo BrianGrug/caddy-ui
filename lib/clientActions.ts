@@ -1,9 +1,7 @@
 import useSWR from "swr";
 
 export async function useConfig() {
-    const { data, error, isLoading } = useSWR('/api/caddy/servers', fetcher, {
-      refreshInterval: 1000,
-    });
+    const { data, error, isLoading } = useSWR('/api/caddy/servers', fetcher);
     return {
       data,
       error,
@@ -12,10 +10,7 @@ export async function useConfig() {
   }
   
   export async function useServer() {
-    const { data, error, isLoading } = useSWR('/api/caddy/servers', fetcher, {
-      refreshInterval: 1000,
-    });
-  
+    const { data, error, isLoading } = useSWR('/api/caddy/servers', fetcher);
     return {
       data,
       error,
@@ -24,10 +19,7 @@ export async function useConfig() {
   }
   
   export async function useUpstreamRoutes(route: Route) {
-    const { data, error, isLoading } = useSWR('http://192.168.1.69:2019/reverse_proxy/upstreams', fetcher, {
-      refreshInterval: 1000,
-    });
-  
+    const { data, error, isLoading } = useSWR('http://192.168.1.69:2019/reverse_proxy/upstreams', fetcher);
     return {
       data,
       error,
@@ -37,10 +29,7 @@ export async function useConfig() {
   }
   
   export function useRoutes() {
-    const { data, error, isLoading } = useSWR('/api/caddy/routes', fetcher, {
-      refreshInterval: 1000,
-    });
-
+    const { data, error, isLoading } = useSWR('/api/caddy/routes', fetcher);
     return {
       data,
       error,

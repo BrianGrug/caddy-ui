@@ -36,7 +36,7 @@ export default function Home() {
           </Card>
         </div>
         <div className='grid grid-flow-row-dense md:grid-cols-6 sm:grid-cols-2 p-2'>
-          <RouteCards routes={routes as Route[]} />
+          <RouteCards routes={routesMap} />
         </div>
       </main>
     )
