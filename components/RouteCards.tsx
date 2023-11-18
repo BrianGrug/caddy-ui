@@ -111,7 +111,7 @@ export function EditRouteDialog({ route }: { route: Route }) {
         control: form.control,
         name: "hosts",
     })
-    
+
     let onSubmit = ((data: any) => {
         pushUpdate(modifiedRoute);
     })
@@ -174,8 +174,9 @@ export function EditRouteDialog({ route }: { route: Route }) {
                                 )}
                             />
                         ))}
-
                         <Button type="submit">Save</Button>
+                        <Button type='button' onClick={() => {appendUpstreams('')}}>Add Host</Button>
+                        <Button type='button' onClick={() => {appendHosts('')}}>Add Upstream</Button>
                     </form>
                 </Form>
             </DialogContent>

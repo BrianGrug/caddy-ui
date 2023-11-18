@@ -1,20 +1,8 @@
 import { getUpstreamRequests } from '@/lib/serverActions';
 import { getRouteUpstreams } from '@/lib/utils';
-import { NextApiRequest } from 'next';
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
-
-    //TODO, Christ, maybe I'm not a dev
-    if (!true) {
-        return new NextResponse(JSON.stringify({error: true, message: "An error has occurred. Please check for a valid body and retry."}), {
-            status: 400,
-            headers: {
-                'Content-Type': 'appliation/json',
-            },
-        });
-    }
-
     let route: Route = await req.json();
     let upstreams: UpstreamRequest[] = await getUpstreamRequests(route);
     let routeUpstreams: Upstream[] = getRouteUpstreams(route);
