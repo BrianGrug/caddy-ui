@@ -20,41 +20,9 @@ export default function Home() {
   if (error) return <Error />
   if (isLoading) return <Loading />
 
-  let route = {
-    "handle": [
-      {
-        "handler": "subroute",
-        "routes": [
-          {
-            "handle": [
-              {
-                "handler": "reverse_proxy",
-                "upstreams": [
-                  {
-                    "dial": "1.1.1.1"
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    ],
-    "match": [
-      {
-        "host": [
-          "containers.grug.dev",
-          "containers.daddyimpregnant.com",
-          "containers.mizuledevelopment.com"
-        ]
-      }
-    ],
-    "terminal": true
-  }
-
   return (
     <main>
-      {routeDialog && <RouteDialog route={route as Route} />}
+      {routeDialog && <RouteDialog route={routes as Route} />}
       <div className='flex items-center justify-center p-6'>
         <Card className='flex'>
           <CardHeader>
