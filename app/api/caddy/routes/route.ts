@@ -38,7 +38,7 @@ export async function DELETE(req: Request) {
         },
     })
 
-    const res = await fetch(`http://192.168.1.69:2019/config/apps/http/servers/srv0/routes/${index}`, {
+    const res = await fetch(`${process.env.CADDY_API}/config/apps/http/servers/srv0/routes/${index}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'

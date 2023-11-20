@@ -1,7 +1,7 @@
 'use server';
   
   export async function getConfig() {
-    const res = await fetch('http://192.168.1.69:2019/config/', {
+    const res = await fetch(`${process.env.CADDY_API}/config/`, {
       cache: 'no-cache',
     }).catch(() => {
       throw new Error('Failed to fetch caddy config. Please check the network and try again.');
@@ -13,7 +13,7 @@
   }
   
   export async function getServer() {
-    const res = await fetch('http://localhost:3000/api/caddy/servers').catch(() => {
+    const res = await fetch(`${process.env.URL}/api/caddy/servers`).catch(() => {
       throw new Error('Failed to fetch caddy servers. Please check the network and try again.');
     });
 
@@ -33,7 +33,7 @@
   }
   
   export async function getUpstreamRequests(route: Route) {
-    let upstreams: UpstreamRequest[] = await fetch(`http://192.168.1.69:2019/reverse_proxy/upstreams`, {
+    let upstreams: UpstreamRequest[] = await fetch(`${process.env.CADDY_API}/reverse_proxy/upstreams`, {
       headers: {
         'Content-Type': 'application/json'
       },
@@ -45,7 +45,7 @@
   }
   
   export async function getRoutes() {
-    let res = await fetch('http://localhost:3000/api/caddy/routes', { cache: 'no-cache' }).catch(() => {
+    let res = await fetch(`${process.env.URL}/api/caddy/routes`, { cache: 'no-cache' }).catch(() => {
       throw new Error('Failed to fetch routes. Please check the network and try again.');
     });
 

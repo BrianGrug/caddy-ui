@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
-    const res = await fetch(`http://192.168.1.69:2019/config/apps/http/servers/`, { cache: 'no-store' });
+    const res = await fetch(`${process.env.CADDY_API}/config/apps/http/servers/`, { cache: 'no-store' });
 
     if (!res.ok) 
       throw new Error('Failed to fetch caddy config. Please check the network and try again.');

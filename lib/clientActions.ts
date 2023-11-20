@@ -19,7 +19,7 @@ export async function useConfig() {
   }
   
   export async function useUpstreamRoutes(route: Route) {
-    const { data, error, isLoading } = useSWR('http://192.168.1.69:2019/reverse_proxy/upstreams', fetcher);
+    const { data, error, isLoading } = useSWR(`${process.env.CADDY_API}/reverse_proxy/upstreams`, fetcher);
     return {
       data,
       error,

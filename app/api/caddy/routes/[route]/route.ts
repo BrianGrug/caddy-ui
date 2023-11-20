@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(request: Request, { params }: { params: { route: number } }) {
   const slug = params.route;
-  const res = await fetch(`http://192.168.1.69:2019/config/apps/http/servers/srv0/routes/${slug}`, { cache: 'no-store' });
+  const res = await fetch(`${process.env.CADDY_API}/config/apps/http/servers/srv0/routes/${slug}`, { cache: 'no-store' });
   let route: Route = await res.json();
 
   if (!res.ok) return onError('Failed to get route');
@@ -44,7 +44,7 @@ export async function PUT(request: Request, { params }: { params: { route: numbe
   const slug = params.route;
   let route: Route = await request.json();
 
-  const res = await fetch(`http://192.168.1.69:2019/config/apps/http/servers/srv0/routes/${slug}`, {
+  const res = await fetch(`${process.env.CADDY_API}/config/apps/http/servers/srv0/routes/${slug}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
