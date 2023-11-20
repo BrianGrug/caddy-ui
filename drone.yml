@@ -1,0 +1,16 @@
+kind: pipeline
+type: docker
+name: caddy-ui
+
+platform:
+  os: linux
+  arch: amd64
+
+
+steps:
+  - name: npm-install
+    image: node:lts-alpine
+    commands:
+      - apk add --no-cache libc6-compat   
+      - npm install
+      - npm run build
