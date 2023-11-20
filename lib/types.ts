@@ -3,25 +3,26 @@ interface Server {
     routes: Route[];
 }
 
-interface Route {
-    handle: Handle[];
-    match: Match[];
-    terminal?: boolean;
+interface Upstream {
+    dial: string;
+}
+
+interface Handle {
+    handler: string;
+    upstreams?: Upstream[];
+    routes?: Route[];
 }
 
 interface Match {
     host: string[];
 }
 
-interface Handle {
-    handler: string;
-    upstreams: Upstream[];
-    routes: Route[];
+interface Route {
+    handle: Handle[];
+    match?: Match[];
+    terminal?: boolean;
 }
 
-interface Upstream {
-    dial: string;
-}
 
 interface UpstreamRequest {
     address: string;

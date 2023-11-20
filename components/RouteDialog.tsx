@@ -1,5 +1,5 @@
 import { updateRoute } from "@/lib/clientActions";
-import { getHosts, getRouteUpstreams } from "@/lib/utils";
+import { getHandler, getHosts, getRouteUpstreams } from "@/lib/utils";
 import { useState } from "react";
 import useSWRMutation from "swr/mutation";
 import { toast } from "./ui/use-toast";
@@ -36,9 +36,9 @@ export function RouteDialog({ route, routesMap }: { route: Route, routesMap: Rou
     let handler: string = "reverse_proxy";
 
     if (index != -1) {
-        validHosts = getHosts(route);
+        validHosts = getHosts(route)!;
         validUpstreams = getRouteUpstreams(route).map((upstream) => upstream.dial);
-        handler = route?.handle[0]?.routes[0]?.handle[0]?.handler;
+        handler = getHandler(route)!;
     }
 
     const form = useForm({
@@ -61,10 +61,11 @@ export function RouteDialog({ route, routesMap }: { route: Route, routesMap: Rou
 
     let onSubmit = (() => {
         let update = {
-            route: modifiedRoute,
+            route: modifiedRoute as Route,
             index: index,
             type: index == -1 ? 'PUT' : 'PATCH'
         }
+
         if (index == -1) update.index = routesMap.length;
         console.log(update.index)
         pushUpdate(update);

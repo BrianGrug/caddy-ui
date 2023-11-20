@@ -32,7 +32,6 @@ export default function RouteCards({ routes }: { routes: Route[] }) {
 
 
     let editRoute = (route: Route) => {
-        console.log(routes)
         setRoute(route);
     }
 
@@ -44,8 +43,8 @@ export default function RouteCards({ routes }: { routes: Route[] }) {
                     <div key={index} className='p-2'>
                         <Card key={index} className='w-[300px]'>
                             <CardHeader>
-                                <CardTitle>{getHosts(route).values().next().value}</CardTitle>
-                                {getHosts(route).map((route => <CardDescription key={route}>{route}</ CardDescription>))}
+                                <CardTitle>{getHosts(route)!.values().next().value}</CardTitle>
+                                {getHosts(route)!.map((route => <CardDescription key={route}>{route}</ CardDescription>))}
                                 <CardDescription></CardDescription>
                             </CardHeader>
                             <CardContent>
