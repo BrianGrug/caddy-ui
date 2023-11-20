@@ -24,10 +24,8 @@ export async function DELETE(req: Request) {
     let route: Route = await req.json();
     let routes: Route[] = await getRoutes();
     let routesMap: Route[] = routes.map(r => r);
-    let hostsMap = routesMap.map(r => r.match[0].host);
 
-    //CHANGE 1 TO 0
-    let targetRoute: Route = routesMap.filter((r) => (JSON.stringify(r.match[0]) === JSON.stringify(route.match[0]))).values().next().value;
+    let targetRoute: Route = routesMap.filter((r) => (JSON.stringify(r) === JSON.stringify(route))).values().next().value;
     
     let index = routesMap.indexOf(targetRoute);
 

@@ -15,10 +15,10 @@ export function RouteDialog({ route, routesMap }: { route: Route, routesMap: Rou
 
     const [modifiedRoute, setRoute] = useState(route);
     const { trigger: pushUpdate } = useSWRMutation(`/api/caddy/routes`, updateRoute, {
-        onError: () => {
+        onError: (err) => {
             return toast({
                 title: "Error",
-                description: "There was an error updating the route",
+                description: "There was an error updating the route. " + err.message,
                 variant: "destructive"
             });
         },
@@ -61,12 +61,36 @@ export function RouteDialog({ route, routesMap }: { route: Route, routesMap: Rou
 
     let onSubmit = (() => {
         let update = {
-            route: modifiedRoute as Route,
+            route: modifiedRoute,
             index: index,
             type: index == -1 ? 'PUT' : 'PATCH'
         }
 
-        if (index == -1) update.index = routesMap.length;
+        update.route = {
+            "handle": [
+                {
+                    "handler": "subroute",
+                    "routes": [
+                        {
+                            "handle": [
+                                {
+                                    "handler": "reverse_proxy",
+                                    "upstreams": validUpstreams.map((upstream) => ({ "dial": upstream }))
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "match": [
+                {
+                    "host": validHosts
+                }
+            ],
+            "terminal": true
+        }
+
+        if (index == -1) update.index = routesMap.length - 1;
         console.log(update.index)
         pushUpdate(update);
     })
