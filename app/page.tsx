@@ -14,6 +14,7 @@ import { RouteDialog } from '@/components/RouteDialog';
 export default function Home() {
 
   const [route, setRoute] = useState<Route>();
+  const [open, setOpen] = useState(false);
   const { data: routes, error, isLoading } = useRoutes();
   let routesMap: Route[] = routes as Route[];
 
@@ -22,7 +23,7 @@ export default function Home() {
 
   return (
     <main>
-      {route && <RouteDialog route={route} routesMap={routesMap} />}
+      {route && <RouteDialog onOpenChange={setOpen} open={open} route={route} routesMap={routesMap} />}
       <div className='flex items-center justify-center p-6'>
         <Card className='flex'>
           <CardHeader>
@@ -35,7 +36,10 @@ export default function Home() {
             </div>
           </CardContent>
           <CardFooter>
-            <Button onClick={() => setRoute({} as Route)} className='translate-y-2.5'>Create</Button>
+            <Button onClick={() => {
+              setRoute({} as Route);
+              setOpen(true);
+            }} className='translate-y-2.5'>Create</Button>
           </CardFooter>
         </Card>
       </div>

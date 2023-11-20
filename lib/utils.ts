@@ -1,5 +1,6 @@
 
 import { type ClassValue, clsx } from "clsx"
+import { NextResponse } from "next/server";
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
@@ -24,4 +25,13 @@ export function getHandler(route: Route) {
     let handle: string = route?.handle[0]?.routes[0]?.handle[0]?.handler
     return handle;
   }
+}
+
+export function onError(message: string, status: number = 500) {
+  return new NextResponse(JSON.stringify({ error: true, message: message }), {
+    status: status,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
 }

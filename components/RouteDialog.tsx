@@ -9,11 +9,13 @@ import { Dialog, DialogContent } from "./ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { DialogClose } from "@radix-ui/react-dialog";
 
-export function RouteDialog({ route, routesMap }: { route: Route, routesMap: Route[] }) {
+export function RouteDialog({ route, routesMap, open, onOpenChange }: { route: Route, routesMap: Route[], open: boolean, onOpenChange: (open: boolean) => void }) {
     let index = routesMap.indexOf(route);
 
     const [modifiedRoute, setRoute] = useState(route);
+
     const { trigger: pushUpdate } = useSWRMutation(`/api/caddy/routes`, updateRoute, {
         onError: (err) => {
             return toast({
@@ -90,11 +92,10 @@ export function RouteDialog({ route, routesMap }: { route: Route, routesMap: Rou
             "terminal": true
         }
 
-        console.log(JSON.stringify(update.route))
-
         if (index == -1) update.index = routesMap.length - 1;
         console.log(update.index)
         pushUpdate(update);
+
     })
 
     let handleChange = (value: any, path: any) => {
@@ -105,7 +106,7 @@ export function RouteDialog({ route, routesMap }: { route: Route, routesMap: Rou
 
 
     return (
-        <Dialog open={route as Route != null}>
+        <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className='sm:max-w-[425px]'>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -154,8 +155,11 @@ export function RouteDialog({ route, routesMap }: { route: Route, routesMap: Rou
                                 )}
                             />
                         ))}
-                        <Button type="submit">Save</Button>
-                        <Button type='button' onClick={() => { appendHosts('') }}>Add Host</Button>
+                        <DialogClose asChild><Button type="submit">Save</Button></DialogClose>
+                        <Button type='button' onClick={() => {
+                            appendHosts('')
+                            onOpenChange(false)
+                        }}>Add Host</Button>
                     </form>
                 </Form>
             </DialogContent>

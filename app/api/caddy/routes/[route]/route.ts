@@ -1,4 +1,5 @@
 import { updateRoute } from "@/lib/serverActions";
+import { onError } from "@/lib/utils";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request, { params }: { params: { route: number } }) {
@@ -6,8 +7,7 @@ export async function GET(request: Request, { params }: { params: { route: numbe
   const res = await fetch(`http://192.168.1.69:2019/config/apps/http/servers/srv0/routes/${slug}`, { cache: 'no-store' });
   let route: Route = await res.json();
 
-  if (!res.ok)
-    throw new Error('Failed to fetch caddy config. Please check the network and try again.');
+  if (!res.ok) onError('Failed to get route');
 
   return new NextResponse(JSON.stringify(route), {
     status: 200,
@@ -30,12 +30,7 @@ export async function PATCH(request: Request, { params }: { params: { route: num
     body: JSON.stringify(route)
   })
 
-  if (!res.ok) return new NextResponse(JSON.stringify({ error: true }), {
-    status: 500,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  if (!res.ok) onError('Failed to edit route')
 
   return new NextResponse(JSON.stringify({ error: false }), {
     status: 200,
@@ -58,15 +53,7 @@ export async function PUT(request: Request, { params }: { params: { route: numbe
     body: JSON.stringify(route)
   })
 
-
-  //console.log(JSON.stringify(route));
-
-  if (!res.ok) return new NextResponse(JSON.stringify({ error: true, message: "Could not save route" }), {
-    status: 500,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  if (!res.ok) onError('Failed to add route');
 
   return new NextResponse(JSON.stringify({ error: false }), {
     status: 200,
