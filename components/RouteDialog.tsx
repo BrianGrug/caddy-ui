@@ -4,14 +4,14 @@ import { useState } from "react";
 import useSWRMutation from "swr/mutation";
 import { toast } from "./ui/use-toast";
 import { useFieldArray, useForm } from "react-hook-form";
-import { set } from "lodash";
+import { get, set } from "lodash";
 import { Dialog, DialogContent } from "./ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 
-export function RouteDialog({ route }: { route: Route }) {
-    let index = getHosts(route).indexOf(route.match[0].host[0]);
+export function RouteDialog({ route, routesMap }: { route: Route, routesMap: Route[] }) {
+    let index = routesMap.indexOf(route);
 
     const [modifiedRoute, setRoute] = useState(route);
     const { trigger: pushUpdate } = useSWRMutation(`/api/caddy/routes/${index}`, updateRoute, {
@@ -36,9 +36,9 @@ export function RouteDialog({ route }: { route: Route }) {
 
     const form = useForm({
         values: {
-            handler: route.handle[0].routes[0].handle[0].handler,
-            upstreams: validUpstreams,
-            hosts: validHosts,
+            handler: route.handle[0].routes[0].handle[0].handler ?? "",
+            upstreams: validUpstreams ?? [],
+            hosts: validHosts ?? [],
         }
     });
 
@@ -53,7 +53,13 @@ export function RouteDialog({ route }: { route: Route }) {
     })
 
     let onSubmit = (() => {
-        pushUpdate(modifiedRoute);
+        let update = {
+            route: modifiedRoute,
+            index: index,
+            type: index == -1 ? 'PUT' : 'PATCH'
+        }
+        if (index == -1) update.index = routesMap.length + 1;
+        pushUpdate(update);
     })
 
 
@@ -115,8 +121,8 @@ export function RouteDialog({ route }: { route: Route }) {
                             />
                         ))}
                         <Button type="submit">Save</Button>
-                        <Button type='button' onClick={() => {appendUpstreams('')}}>Add Host</Button>
-                        <Button type='button' onClick={() => {appendHosts('')}}>Add Upstream</Button>
+                        <Button type='button' onClick={() => { appendUpstreams('') }}>Add Host</Button>
+                        <Button type='button' onClick={() => { appendHosts('') }}>Add Upstream</Button>
                     </form>
                 </Form>
             </DialogContent>

@@ -48,15 +48,16 @@ export async function useConfig() {
     }).then((res) => res.json());
   }
 
-  export function updateRoute(url: any, { arg }: { arg: Route }) {
+  export function updateRoute(url: any, { arg }: { arg: { route: Route, index: number, type: string } }) {
+    console.log(arg.index)
     return fetch(url, {
-      method: 'PATCH',
+      method: arg.type,
       headers: {
         'Content-Type': 'application/json'
       },
       cache: 'no-cache',
-      body: JSON.stringify(arg)
-    }).then((res) => res.json());
+      body: JSON.stringify(arg.route)
+    }).then((res) => res.json()).catch((err) => console.log(err));
   }
 
   

@@ -32,12 +32,13 @@ export default function RouteCards({ routes }: { routes: Route[] }) {
 
 
     let editRoute = (route: Route) => {
+        console.log(routes)
         setRoute(route);
     }
 
     return (
         <>
-            {route && <RouteDialog route={route} />}
+            {route && <RouteDialog route={route} routesMap={routes} />}
             {
                 routes.map((route, index) => (
                     <div key={index} className='p-2'>
