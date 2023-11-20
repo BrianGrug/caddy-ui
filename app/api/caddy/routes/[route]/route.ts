@@ -58,6 +58,9 @@ export async function PUT(request: Request, { params }: { params: { route: numbe
     body: JSON.stringify(route)
   })
 
+
+  //console.log(JSON.stringify(route));
+
   if (!res.ok) return new NextResponse(JSON.stringify({ error: true, message: "Could not save route" }), {
     status: 500,
     headers: {

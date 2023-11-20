@@ -31,8 +31,8 @@ export function RouteDialog({ route, routesMap }: { route: Route, routesMap: Rou
         }
     });
 
-    let validHosts: any[] = ["google.com"];
-    let validUpstreams: any[] = ["1.1.1.1"];
+    let validHosts: any[] = ["google.com", "test.com"];
+    let validUpstreams: any[] = ["1.1.1.1", "69.126.24.175"];
     let handler: string = "reverse_proxy";
 
     if (index != -1) {
@@ -89,6 +89,8 @@ export function RouteDialog({ route, routesMap }: { route: Route, routesMap: Rou
             ],
             "terminal": true
         }
+
+        console.log(JSON.stringify(update.route))
 
         if (index == -1) update.index = routesMap.length - 1;
         console.log(update.index)
@@ -153,8 +155,7 @@ export function RouteDialog({ route, routesMap }: { route: Route, routesMap: Rou
                             />
                         ))}
                         <Button type="submit">Save</Button>
-                        <Button type='button' onClick={() => { appendUpstreams('') }}>Add Host</Button>
-                        <Button type='button' onClick={() => { appendHosts('') }}>Add Upstream</Button>
+                        <Button type='button' onClick={() => { appendHosts('') }}>Add Host</Button>
                     </form>
                 </Form>
             </DialogContent>
