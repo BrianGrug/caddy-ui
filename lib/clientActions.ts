@@ -49,8 +49,7 @@ export async function useConfig() {
   }
 
   export function updateRoute(url: any, { arg }: { arg: { route: Route, index: number, type: string } }) {
-    console.log(arg.index)
-    return fetch(url, {
+    return fetch(url + `/` + arg.index, {
       method: arg.type,
       headers: {
         'Content-Type': 'application/json'

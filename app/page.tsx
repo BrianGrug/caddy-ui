@@ -22,7 +22,7 @@ export default function Home() {
 
   return (
     <main>
-      {route && <RouteDialog route={route} routeMap={routesMap} />}
+      {route && <RouteDialog route={route} routesMap={routesMap} />}
       <div className='flex items-center justify-center p-6'>
         <Card className='flex'>
           <CardHeader>
@@ -35,7 +35,7 @@ export default function Home() {
             </div>
           </CardContent>
           <CardFooter>
-            <Button onClick={() => setRoute(route)} className='translate-y-2.5'>Create</Button>
+            <Button onClick={() => setRoute({} as Route)} className='translate-y-2.5'>Create</Button>
           </CardFooter>
         </Card>
       </div>

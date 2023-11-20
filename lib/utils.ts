@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getHosts(route: Route) {
-  return route.match.map(match => match.host).flatMap(host => host);
+  return route?.match?.map(match => match.host).flatMap(host => host);
 }
 
 export function getRouteType(route: Route) {
@@ -15,6 +15,6 @@ export function getRouteType(route: Route) {
 }
 
 export function getRouteUpstreams(route: Route, index: number = 0) {
-  let test: Upstream[] = route.handle[index].routes?.flat()[index].handle[index].upstreams!;
-  return test;
+  let upstreams: Upstream[] = route.handle[index].routes?.flat()[index].handle[index].upstreams;
+  return upstreams;
 }

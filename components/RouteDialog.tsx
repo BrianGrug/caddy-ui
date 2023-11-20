@@ -14,7 +14,7 @@ export function RouteDialog({ route, routesMap }: { route: Route, routesMap: Rou
     let index = routesMap.indexOf(route);
 
     const [modifiedRoute, setRoute] = useState(route);
-    const { trigger: pushUpdate } = useSWRMutation(`/api/caddy/routes/${index}`, updateRoute, {
+    const { trigger: pushUpdate } = useSWRMutation(`/api/caddy/routes`, updateRoute, {
         onError: () => {
             return toast({
                 title: "Error",
@@ -31,12 +31,19 @@ export function RouteDialog({ route, routesMap }: { route: Route, routesMap: Rou
         }
     });
 
-    let validHosts: any[] = getHosts(route);
-    let validUpstreams: any[] = getRouteUpstreams(route).map((upstream) => upstream.dial);
+    let validHosts: any[] = ["google.com"];
+    let validUpstreams: any[] = ["1.1.1.1"];
+    let handler: string = "reverse_proxy";
+
+    if (index != -1) {
+        validHosts = getHosts(route);
+        validUpstreams = getRouteUpstreams(route).map((upstream) => upstream.dial);
+        handler = route?.handle[0]?.routes[0]?.handle[0]?.handler;
+    }
 
     const form = useForm({
         values: {
-            handler: route.handle[0].routes[0].handle[0].handler ?? "",
+            handler: handler,
             upstreams: validUpstreams ?? [],
             hosts: validHosts ?? [],
         }
@@ -58,10 +65,10 @@ export function RouteDialog({ route, routesMap }: { route: Route, routesMap: Rou
             index: index,
             type: index == -1 ? 'PUT' : 'PATCH'
         }
-        if (index == -1) update.index = routesMap.length + 1;
+        if (index == -1) update.index = routesMap.length;
+        console.log(update.index)
         pushUpdate(update);
     })
-
 
     let handleChange = (value: any, path: any) => {
         let updatedRoute = set(modifiedRoute, path, value.target.value);
