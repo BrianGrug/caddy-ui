@@ -13,7 +13,7 @@ This project is built using the following technologies:
 
 ## Checklist
 
-- [ ] Dockerfile
+- [X] Dockerfile
 - [X] View all Routes
 - [X] Delete routes
 - [X] Add routes
