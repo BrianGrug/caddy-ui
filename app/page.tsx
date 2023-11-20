@@ -37,7 +37,29 @@ export default function Home() {
           </CardContent>
           <CardFooter>
             <Button onClick={() => {
-              setRoute({} as Route);
+              setRoute({
+                "handle": [
+                  {
+                    "handler": "subroute",
+                    "routes": [
+                      {
+                        "handle": [
+                          {
+                            "handler": "reverse_proxy",
+                            "upstreams": []
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "match": [
+                  {
+                    "host": []
+                  }
+                ],
+                "terminal": true
+              })
               setOpen(true);
             }} className='translate-y-2.5'>Create</Button>
           </CardFooter>

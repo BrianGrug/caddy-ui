@@ -16,9 +16,9 @@ This project is built using the following technologies:
 - [ ] Dockerfile
 - [X] View all Routes
 - [X] Delete routes
-- [ ] Add routes
+- [X] Add routes
 - [X] Edit routes
-- [ ] User accounts
+- [ ] Authentication 
 
 ## Getting Started
 

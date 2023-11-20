@@ -12,6 +12,7 @@ import { RouteDialog } from './RouteDialog';
 export default function RouteCards({ routes }: { routes: Route[] }) {
 
     const [route, setRoute] = useState<Route>();
+    const [open, setOpen] = useState(false);
 
     const { trigger: handleDelete } = useSWRMutation("/api/caddy/routes", deleteRoute, {
         onError: () => {
@@ -37,7 +38,7 @@ export default function RouteCards({ routes }: { routes: Route[] }) {
 
     return (
         <>
-            {route && <RouteDialog route={route} routesMap={routes} />}
+            {route && <RouteDialog open={open} onOpenChange={setOpen} route={route} routesMap={routes} />}
             {
                 routes.map((route, index) => (
                     <div key={index} className='p-2'>
@@ -54,7 +55,10 @@ export default function RouteCards({ routes }: { routes: Route[] }) {
                                 <p className="text-sm text-muted-foreground">{getRouteUpstreams(route)?.map((upstream => upstream.dial))}</p>
                             </CardContent>
                             <CardFooter className="flex justify-between">
-                                <Button onClick={() => { editRoute(route) }}>Edit</Button>
+                                <Button onClick={() => { 
+                                    editRoute(route)
+                                    setOpen(true)
+                                 }}>Edit</Button>
                                 <Button variant="destructive" onClick={() => { handleDelete(route) }}>Delete</Button>
                             </CardFooter>
                         </Card>

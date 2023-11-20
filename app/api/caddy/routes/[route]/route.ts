@@ -7,7 +7,7 @@ export async function GET(request: Request, { params }: { params: { route: numbe
   const res = await fetch(`http://192.168.1.69:2019/config/apps/http/servers/srv0/routes/${slug}`, { cache: 'no-store' });
   let route: Route = await res.json();
 
-  if (!res.ok) onError('Failed to get route');
+  if (!res.ok) return onError('Failed to get route');
 
   return new NextResponse(JSON.stringify(route), {
     status: 200,
@@ -30,9 +30,9 @@ export async function PATCH(request: Request, { params }: { params: { route: num
     body: JSON.stringify(route)
   })
 
-  if (!res.ok) onError('Failed to edit route')
+  if (res.status != 200) return onError('Failed to edit route')
 
-  return new NextResponse(JSON.stringify({ error: false }), {
+  return new NextResponse(JSON.stringify(route), {
     status: 200,
     headers: {
       'Content-Type': 'application/json',
@@ -53,9 +53,9 @@ export async function PUT(request: Request, { params }: { params: { route: numbe
     body: JSON.stringify(route)
   })
 
-  if (!res.ok) onError('Failed to add route');
+  if (res.status != 200) return onError('Failed to add route');
 
-  return new NextResponse(JSON.stringify({ error: false }), {
+  return new NextResponse(JSON.stringify(route), {
     status: 200,
     headers: {
       'Content-Type': 'application/json',

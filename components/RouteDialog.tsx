@@ -5,16 +5,19 @@ import useSWRMutation from "swr/mutation";
 import { toast } from "./ui/use-toast";
 import { useFieldArray, useForm } from "react-hook-form";
 import { get, set } from "lodash";
-import { Dialog, DialogContent } from "./ui/dialog";
+import { Dialog, DialogContent, DialogFooter } from "./ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { DialogClose } from "@radix-ui/react-dialog";
 
+//TODO one day, I'll clean this up
 export function RouteDialog({ route, routesMap, open, onOpenChange }: { route: Route, routesMap: Route[], open: boolean, onOpenChange: (open: boolean) => void }) {
     let index = routesMap.indexOf(route);
 
     const [modifiedRoute, setRoute] = useState(route);
+
+
 
     const { trigger: pushUpdate } = useSWRMutation(`/api/caddy/routes`, updateRoute, {
         onError: (err) => {
@@ -33,12 +36,12 @@ export function RouteDialog({ route, routesMap, open, onOpenChange }: { route: R
         }
     });
 
-    let validHosts: any[] = ["google.com", "test.com"];
-    let validUpstreams: any[] = ["1.1.1.1", "69.126.24.175"];
+    let validHosts: any[] = [];
+    let validUpstreams: any[] = [];
     let handler: string = "reverse_proxy";
 
     if (index != -1) {
-        validHosts = getHosts(route)!;
+        validHosts = getHosts(modifiedRoute)!;
         validUpstreams = getRouteUpstreams(route).map((upstream) => upstream.dial);
         handler = getHandler(route)!;
     }
@@ -68,32 +71,8 @@ export function RouteDialog({ route, routesMap, open, onOpenChange }: { route: R
             type: index == -1 ? 'PUT' : 'PATCH'
         }
 
-        update.route = {
-            "handle": [
-                {
-                    "handler": "subroute",
-                    "routes": [
-                        {
-                            "handle": [
-                                {
-                                    "handler": "reverse_proxy",
-                                    "upstreams": validUpstreams.map((upstream) => ({ "dial": upstream }))
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ],
-            "match": [
-                {
-                    "host": validHosts
-                }
-            ],
-            "terminal": true
-        }
-
         if (index == -1) update.index = routesMap.length - 1;
-        console.log(update.index)
+        console.log(JSON.stringify(update.route), update.index)
         pushUpdate(update);
 
     })
@@ -133,7 +112,7 @@ export function RouteDialog({ route, routesMap, open, onOpenChange }: { route: R
                                     <FormItem>
                                         <FormLabel>Upstream {index + 1}</FormLabel>
                                         <FormControl>
-                                            <Input {...field} onChange={(value) => handleChange(value, `handle[0].routes[0].handle[0].upstreams[${index}].dial`)} />
+                                            <Input {...field} placeholder="127.0.0.1" onChange={(value) => handleChange(value, `handle[0].routes[0].handle[0].upstreams[${index}].dial`)} />
                                         </FormControl>
                                     </FormItem>
                                 )}
@@ -149,17 +128,17 @@ export function RouteDialog({ route, routesMap, open, onOpenChange }: { route: R
                                     <FormItem>
                                         <FormLabel>Host {index + 1}</FormLabel>
                                         <FormControl>
-                                            <Input {...field} onChange={(value) => handleChange(value, `match[0].host[${index}]`)} />
+                                            <Input {...field} placeholder="example.com" onChange={(value) => handleChange(value, `match[0].host[${index}]`)} />
                                         </FormControl>
                                     </FormItem>
                                 )}
                             />
                         ))}
-                        <DialogClose asChild><Button type="submit">Save</Button></DialogClose>
-                        <Button type='button' onClick={() => {
-                            appendHosts('')
-                            onOpenChange(false)
-                        }}>Add Host</Button>
+                        <DialogFooter className="translate-y-2">
+                        <Button variant="outline" disabled={upstreams.length >= 1} type='button' onClick={() => {appendUpstreams('')}}>Add Upstream</Button>
+                            <Button variant="outline" type='button' onClick={() => {appendHosts('')}}>Add Host</Button>
+                            <DialogClose asChild><Button onClick={() => onOpenChange(false)} type="submit">Save</Button></DialogClose>
+                        </DialogFooter>
                     </form>
                 </Form>
             </DialogContent>
