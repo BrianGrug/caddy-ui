@@ -11,7 +11,7 @@ export default function Error() {
 
     return (
         <div className='flex justify-center'>
-            <div className="flex justify-center items-center min-h-screen h-[90vh]">
+            <div className="flex justify-center items-center h-[80vh]">
                 <Card>
                     <CardHeader>
                         <CardTitle>Error</CardTitle>

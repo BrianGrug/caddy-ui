@@ -12,6 +12,7 @@ This project provides a user-friendly web interface for managing a Caddy reverse
 
 ## TODO
 
+- [ ] More than just reverse_proxy directive
 - [ ] Authentication 
 - [ ] Persistant storage
 

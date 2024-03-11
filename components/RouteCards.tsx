@@ -69,7 +69,7 @@ export default function RouteCards() {
                                     </div>
                                     <div>
                                         <p className="text-sm font-medium leading-none">
-                                            Tunneling to
+                                            Destination
                                         </p>
                                         <p className="text-sm text-muted-foreground">{getRouteUpstreams(route)?.map((upstream => upstream.dial))}</p>
                                     </div>

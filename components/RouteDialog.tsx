@@ -15,7 +15,7 @@ import { DialogClose } from "@radix-ui/react-dialog";
 export function RouteDialog({ route, routesMap, open, onOpenChange }: { route: Route, routesMap: Route[], open: boolean, onOpenChange: (open: boolean) => void }) {
     let index = routesMap.indexOf(route);
 
-    const [modifiedRoute, setRoute] = useState(route);
+    const [modifiedRoute, setRoute] = useState<Route>(route);
 
 
 
