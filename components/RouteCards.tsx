@@ -42,7 +42,7 @@ export default function RouteCards({ routes }: { routes: Route[] }) {
             {
                 routes.map((route, index) => (
                     <div key={index} className='p-2'>
-                        <Card key={index} className='w-[300px]'>
+                        <Card key={index} className='w-[15vw]'>
                             <CardHeader>
                                 <CardTitle>{getHosts(route)!.values().next().value}</CardTitle>
                                 {getHosts(route)!.map((route => <CardDescription key={route}>{route}</ CardDescription>))}
