@@ -11,15 +11,7 @@ export default function Error() {
 
     return (
         <div className='flex justify-center'>
-            <Card>
-                <CardHeader>
-                    <CardTitle>Error</CardTitle>
-                    <CardDescription>There was an error fetching your data</CardDescription>
-                </CardHeader>
-                <CardFooter className="flex justify-center">
-                    <Button onClick={handleRefresh}>Retry</Button>
-                </CardFooter>
-            </Card>
+            <>Error</>
         </div>
     )
 }

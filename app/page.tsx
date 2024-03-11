@@ -23,7 +23,7 @@ export default function Home() {
   return (
     <main>
       {routeDialog && <RouteDialog route={routes as Route} />}
-      <div className='flex items-center justify-center p-6'>
+      <div className='flex flex-grid'>
         <Card className='flex'>
           <CardHeader>
             <CardTitle>Active Routes</CardTitle>
